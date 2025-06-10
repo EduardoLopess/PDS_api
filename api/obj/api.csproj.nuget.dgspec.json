@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\api\\api.csproj": {}
+    "C:\\Edu\\Projetos\\api\\api\\api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\api\\api.csproj": {
+    "C:\\Edu\\Projetos\\api\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\api\\api.csproj",
+        "projectUniqueName": "C:\\Edu\\Projetos\\api\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\api\\api.csproj",
+        "projectPath": "C:\\Edu\\Projetos\\api\\api\\api.csproj",
         "packagesPath": "C:\\Users\\dudul\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\api\\obj\\",
+        "outputPath": "C:\\Edu\\Projetos\\api\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dudul\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -26,11 +26,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Data\\Data.csproj": {
-                "projectPath": "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Data\\Data.csproj"
+              "C:\\Edu\\Projetos\\api\\Data\\Data.csproj": {
+                "projectPath": "C:\\Edu\\Projetos\\api\\Data\\Data.csproj"
               },
-              "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Domain\\Domain.csproj"
+              "C:\\Edu\\Projetos\\api\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Edu\\Projetos\\api\\Domain\\Domain.csproj"
               }
             }
           }
@@ -61,21 +61,17 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[9.0.3, )"
+              "version": "[9.0.5, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.3, )"
+              "version": "[9.0.5, )"
             },
-            "Microsoft.EntityFrameworkCore.Sqlite": {
+            "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[9.0.3, )"
-            },
-            "Npgsql.EntityFrameworkCore.PostgreSQL": {
-              "target": "Package",
-              "version": "[9.0.4, )"
+              "version": "[8.1.4, )"
             }
           },
           "imports": [
@@ -101,14 +97,14 @@
         }
       }
     },
-    "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Data\\Data.csproj": {
+    "C:\\Edu\\Projetos\\api\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Data\\Data.csproj",
+        "projectUniqueName": "C:\\Edu\\Projetos\\api\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Data\\Data.csproj",
+        "projectPath": "C:\\Edu\\Projetos\\api\\Data\\Data.csproj",
         "packagesPath": "C:\\Users\\dudul\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Data\\obj\\",
+        "outputPath": "C:\\Edu\\Projetos\\api\\Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dudul\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -123,8 +119,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Domain\\Domain.csproj"
+              "C:\\Edu\\Projetos\\api\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Edu\\Projetos\\api\\Domain\\Domain.csproj"
               }
             }
           }
@@ -147,11 +143,13 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[9.0.3, )"
+              "version": "[9.0.5, )"
             },
-            "Microsoft.EntityFrameworkCore.Sqlite": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.3, )"
+              "version": "[9.0.5, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
@@ -178,14 +176,14 @@
         }
       }
     },
-    "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Domain\\Domain.csproj": {
+    "C:\\Edu\\Projetos\\api\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Edu\\Projetos\\api\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Domain\\Domain.csproj",
+        "projectPath": "C:\\Edu\\Projetos\\api\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\dudul\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dudul\\OneDrive\\Documentos\\api\\Domain\\obj\\",
+        "outputPath": "C:\\Edu\\Projetos\\api\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dudul\\AppData\\Roaming\\NuGet\\NuGet.Config"
