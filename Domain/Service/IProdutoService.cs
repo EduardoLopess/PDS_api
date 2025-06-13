@@ -7,6 +7,6 @@ namespace Domain.Service
 {
     public interface IProdutoService
     {
-        
+        Task<bool> ProdutosExiste(IList<int> produtoIds);
     }
 }

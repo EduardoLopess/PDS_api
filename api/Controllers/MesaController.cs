@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Domain.DTOs;
 using Domain.Entities;
 using Domain.Interfaces;
+using Domain.Service;
 using Domain.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +14,11 @@ namespace api.Controllers
     {
         private readonly IMesaRepository _mesaRepository;
         private readonly IMapper _mapper;
-        public MesaController(IMesaRepository mesaRepository, IMapper mapper)
+        private readonly IMesaService _mesaService;
+        public MesaController(IMesaRepository mesaRepository, IMesaService mesaService, IMapper mapper)
         {
             _mesaRepository = mesaRepository;
+            _mesaService = mesaService;
             _mapper = mapper;
         }
 
@@ -47,6 +46,11 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return HttpMessageOk("Dados incorretos. ");
+
+            var numeroMesa = createModel.NumeroMesa;
+            var numeroCadastrado = await _mesaService.NumeroCadastrado(numeroMesa);
+            if (numeroCadastrado)
+                return BadRequest("Número informado já existe.");
 
             var mesa = _mapper.Map<Mesa>(createModel);
             await _mesaRepository.CreateAsync(mesa);
@@ -76,8 +80,13 @@ namespace api.Controllers
             if (mesa == null) 
                 return NotFound(new { mensagem = "Mesa não encontrada." });
 
-            if (mesa.StatusMesa)
+            var mesaOcupada = await _mesaService.MesaOcupada(id);
+            if (mesaOcupada)
                 return BadRequest(new { mensagem = "Mesa está ocupada e não pode ser deletada." });
+
+
+            // if (mesa.StatusMesa)
+            //         return BadRequest(new { mensagem = "Mesa está ocupada e não pode ser deletada." });
 
             await _mesaRepository.DeleteAsync(id);
             return HttpMessageOk("Mesa deletada com sucesso.");

@@ -16,39 +16,29 @@ namespace Data.Validation
             _mesaRepository = mesaRepository;
         }
 
-        public Task AtualizarMesa(Mesa mesa)
+        public async Task<bool> NumeroCadastrado(int numeroMesa)
         {
-            throw new NotImplementedException();
+            return await _mesaRepository.ExisteMesaPorNumeroAsync(numeroMesa);
         }
 
-        public async Task CriarMesa(Mesa mesa)
+        public async Task<bool> MesaExiste(int id)
         {
-            throw new NotImplementedException();
+            var mesaExiste = await _mesaRepository.GetByIdAsync(id);
+            if (mesaExiste == null)
+            {
+                return false;
+            }
+            return true;
         }
 
-        public Task DeletarMesa(int id)
+        public async Task<bool> MesaOcupada(int id)
         {
-            throw new NotImplementedException();
+            return await _mesaRepository.MesaOcupada(id);
         }
 
-        public Task<IList<Mesa>> GetAll()
+        public async Task<bool> MudaStatusMesaAsync(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<Mesa> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> MesaOcupada(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task NumeroCadastrado(int id)
-        {
-            throw new NotImplementedException();
+            return await _mesaRepository.MudaStatusMesaAsync(id);
         }
     }
 }

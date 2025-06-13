@@ -43,7 +43,6 @@ namespace Data.Repository
         {
             var produto = await _context.Produtos
                                 .SingleOrDefaultAsync(p => p.Id == entityId);
-      
 
             return produto;
         }
@@ -60,6 +59,21 @@ namespace Data.Repository
                 await
                     _context.SaveChangesAsync();
             }
+        }
+
+        //Extra
+        public async Task<List<Produto>> BuscarPorIdsAsync(List<int> Ids)
+        {
+            return await _context.Produtos
+                .Where(p => Ids.Contains(p.Id))
+                .ToListAsync();
+        }
+
+        public async Task<List<Produto>> BuscarProdutoAsync(List<int> produtoIds)
+        {
+            return await _context.Produtos
+                    .Where(i => produtoIds.Contains(i.Id))
+                    .ToListAsync();
         }
     }
 }

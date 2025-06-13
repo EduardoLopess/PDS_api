@@ -11,9 +11,11 @@ namespace Data.Repository
         {
             _context = context;
         }
-        public async Task CreatePedidoAsync(Pedido entity, IList<int> ItemIds)
+        public async Task CreatePedidoAsync(Pedido entity)
         {
-            throw new NotImplementedException();
+            _context.Pedidos.Add(entity);
+            await
+                _context.SaveChangesAsync();
         }
 
         public Task DeleteAsync(int entityId)
@@ -23,12 +25,19 @@ namespace Data.Repository
 
         public async Task<IList<Pedido>> GetAllAsync()
         {
-            return await _context.Pedidos.ToListAsync();
+            return await _context.Pedidos
+            .Include(p => p.Mesa)
+            .Include(p => p.Itens).ThenInclude(i => i.Produto)
+            .ToListAsync();
         }
 
-        public Task<Pedido> GetByIdAsync(int entityId)
+        public async Task<Pedido?> GetByIdAsync(int entityId)
         {
-            throw new NotImplementedException();
+            var pedido = await _context.Pedidos
+                        .Include(p => p.Mesa)
+                        .Include(p => p.Itens).ThenInclude(i => i.Produto)
+                        .SingleOrDefaultAsync(p => p.Id == entityId);
+            return pedido;
         }
 
         public Task UpdateAsync(Pedido entity)

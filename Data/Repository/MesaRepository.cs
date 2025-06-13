@@ -71,9 +71,26 @@ namespace Data.Repository
 
         }
 
+        //Extra
         public async Task GetByNumeroAsync(int numeroMesa)
         {
             throw new NotImplementedException();
         }
+
+        public async Task<bool> ExisteMesaPorNumeroAsync(int numero)
+        {
+            return await _context.Mesas.AnyAsync(m => m.NumeroMesa == numero);
+        }
+
+        public async Task<bool> MesaOcupada(int id)
+        {
+            var mesa = await _context.Mesas.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (mesa == null)
+                return false;
+
+            return mesa.StatusMesa == true;
+        }
+
     }
 }

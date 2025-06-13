@@ -18,6 +18,9 @@ namespace api.Configuration
             CreateMap<DrinkViewModel, Drink>();
             CreateMap<PedidoViewModel, Pedido>();
             CreateMap<AdicionalViewModel, Adicional>();
+
+            CreateMap<CriarPedidoViewModel, Pedido>();
+            CreateMap<CriarItemViewModel, Item>();
         }
         
     }

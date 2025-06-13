@@ -8,6 +8,6 @@ namespace Domain.Interfaces
 {
     public interface IPedidoRepository : IBaseRepository<Pedido>
     {
-        Task CreatePedidoAsync(Pedido entity, IList<int> ItemIds);
+        Task CreatePedidoAsync(Pedido entity);
     }
 }
