@@ -5,5 +5,7 @@ namespace Domain.Entities
         public int Id { get; set; }
         public string? AdicionalNome { get; set; }
         public double PrecoAdicional { get; set; }
+        
+        public List<Item> Itens { get; set; } 
     }
 }

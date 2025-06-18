@@ -18,17 +18,25 @@ namespace Data.Repository
                 _context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(int entityId)
+        public async Task DeleteAsync(int entityId)
         {
-            throw new NotImplementedException();
+            var pedido = await _context.Pedidos.FindAsync(entityId);
+            if (pedido != null)
+            {
+                _context.Pedidos.Remove(pedido);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<IList<Pedido>> GetAllAsync()
         {
             return await _context.Pedidos
-            .Include(p => p.Mesa)
-            .Include(p => p.Itens).ThenInclude(i => i.Produto)
-            .ToListAsync();
+                .Include(p => p.Mesa)
+                .Include(p => p.Itens).ThenInclude(i => i.Produto)
+                .Include(p => p.Itens).ThenInclude(i => i.Adicionals) 
+                .Include(p => p.Itens).ThenInclude(i => i.SaborDrink)
+                .ToListAsync();
+
         }
 
         public async Task<Pedido?> GetByIdAsync(int entityId)
@@ -36,13 +44,22 @@ namespace Data.Repository
             var pedido = await _context.Pedidos
                         .Include(p => p.Mesa)
                         .Include(p => p.Itens).ThenInclude(i => i.Produto)
+                        .Include(a => a.Itens).ThenInclude(a => a.Adicionals)
+                        .Include(s => s.Itens).ThenInclude(s => s.SaborDrink)
                         .SingleOrDefaultAsync(p => p.Id == entityId);
             return pedido;
         }
 
-        public Task UpdateAsync(Pedido entity)
+        public async Task UpdateAsync(Pedido entity)
         {
-            throw new NotImplementedException();
+            var pedidoExiste = await _context.Pedidos.FirstOrDefaultAsync(p => p.Id == entity.Id);
+
+            if (pedidoExiste != null)
+            {
+                _context.Entry(pedidoExiste).CurrentValues.SetValues(entity);
+                await
+                    _context.SaveChangesAsync();
+            }
         }
     }
 }

@@ -84,10 +84,6 @@ namespace api.Controllers
             if (mesaOcupada)
                 return BadRequest(new { mensagem = "Mesa está ocupada e não pode ser deletada." });
 
-
-            // if (mesa.StatusMesa)
-            //         return BadRequest(new { mensagem = "Mesa está ocupada e não pode ser deletada." });
-
             await _mesaRepository.DeleteAsync(id);
             return HttpMessageOk("Mesa deletada com sucesso.");
         }

@@ -3,6 +3,7 @@ using System;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250616021107_arrumandorelacionamento")]
+    partial class arrumandorelacionamento
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,16 +102,11 @@ namespace Data.Migrations
                     b.Property<int>("Qtd")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("SaborDrinkId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PedidoId");
 
                     b.HasIndex("ProdutoId");
-
-                    b.HasIndex("SaborDrinkId");
 
                     b.ToTable("Itens");
                 });
@@ -226,9 +224,6 @@ namespace Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Disponivel")
-                        .HasColumnType("boolean");
-
                     b.Property<int?>("DrinkId")
                         .HasColumnType("integer");
 
@@ -271,15 +266,9 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Sabor", "SaborDrink")
-                        .WithMany()
-                        .HasForeignKey("SaborDrinkId");
-
                     b.Navigation("Pedido");
 
                     b.Navigation("Produto");
-
-                    b.Navigation("SaborDrink");
                 });
 
             modelBuilder.Entity("Domain.Entities.Pagamento", b =>

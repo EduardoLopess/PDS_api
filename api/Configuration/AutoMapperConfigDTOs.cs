@@ -17,23 +17,28 @@ namespace api.Configuration
             CreateMap<Mesa, MesaDTO>();
             CreateMap<Sabor, SaborDTO>();
             CreateMap<Drink, DrinkDTO>();
-            CreateMap<Item, ItemDTO>();
+            CreateMap<Item, ItemDTO>()
+                .ForMember(dest => dest.Adicionais, opt => opt.MapFrom(src => src.Adicionals));
             CreateMap<Pedido, PedidoDTO>()
                 .ForMember(dest => dest.DateTimeFormatado, opt =>
                     opt.MapFrom(src => src.DateTime.ToString(("dd/MM/yyyy HH:mm"))))
                 .ForMember(dest => dest.NumeroMesa, opt =>
-                    opt.MapFrom(src => src.Mesa != null ? src.Mesa.NumeroMesa : 0));
-                // .ForMember(dest => dest.Mesa, opt =>
-                //     opt.MapFrom(src => src.Mesa));
-                
+                    opt.MapFrom(src => src.Mesa != null ? src.Mesa.NumeroMesa : 0))
+                .ForMember(dest => dest.MesaId, opt =>
+                    opt.MapFrom(src => src.Mesa != null ? src.Mesa.Id : 0));
+            
 
 
             CreateMap<Adicional, AdicionalDTO>()
                 .ForMember(dest => dest.PrecoAdicionalFormatado, opt =>
                     opt.MapFrom(src => src.PrecoAdicional.ToString("N2", new System.Globalization.CultureInfo("pt-BR"))));
 
-            CreateMap<Pedido, CriarPedidoDTO>();
-            CreateMap<Item, CriarItemDTO>();
+            CreateMap<Pedido, CriarPedidoDTO>()
+                .ForMember(dest => dest.Itens, opt => opt.MapFrom(src => src.Itens));
+
+            CreateMap<Item, CriarItemDTO>()
+                .ForMember(dest => dest.Adicionals, opt => opt.MapFrom(src => src.Adicionals))
+                .ForMember(dest => dest.SaborDrink, opt => opt.MapFrom(src => src.SaborDrink));
 
             
 

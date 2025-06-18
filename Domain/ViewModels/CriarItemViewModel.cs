@@ -9,5 +9,8 @@ namespace Domain.ViewModels
     {
         public int ProdutoId { get; set; }
         public int Qtd { get; set; }
+        public IList<int?> AdicionalIDs { get; set; }
+        public int? SaborDrinkId { get; set; }
+
     }
 }

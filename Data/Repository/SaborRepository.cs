@@ -62,5 +62,17 @@ namespace Data.Repository
                     _context.SaveChangesAsync();
             }
         }
+
+        //EXTRA
+        public async Task<bool> MudarDisponibilidadeAsync(int entityId)
+        {
+            var sabor = await _context.Sabores.FirstOrDefaultAsync(s => s.Id == entityId);
+            if (sabor == null)
+                return false;
+
+            sabor.Disponivel = !sabor.Disponivel;
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

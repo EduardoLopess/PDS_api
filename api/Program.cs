@@ -1,4 +1,5 @@
 using api.Configuration;
+using api.Validation;
 using Data;
 using Data.Repository;
 using Data.Validation;
@@ -21,6 +22,7 @@ builder.Services.AddAutoMapper(typeof(AutoMapperConfigDTOs), typeof(AutoMapperCo
 
 builder.Services.AddScoped<IProdutoService, ProdutoValidation>();
 builder.Services.AddScoped<IMesaService, MesaValidation>();
+builder.Services.AddScoped<IPedidoService, PedidoValidation>();
 
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IMesaRepository, MesaRepository>();

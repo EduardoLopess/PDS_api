@@ -3,6 +3,7 @@ using System;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250615000429_listAdicional")]
+    partial class listAdicional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("AdicionalItem", b =>
-                {
-                    b.Property<int>("AdicionalsId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ItensId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AdicionalsId", "ItensId");
-
-                    b.HasIndex("ItensId");
-
-                    b.ToTable("AdicionalItem");
-                });
 
             modelBuilder.Entity("Domain.Entities.Adicional", b =>
                 {
@@ -48,10 +36,15 @@ namespace Data.Migrations
                     b.Property<string>("AdicionalNome")
                         .HasColumnType("text");
 
+                    b.Property<int?>("ItemId")
+                        .HasColumnType("integer");
+
                     b.Property<double>("PrecoAdicional")
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
 
                     b.ToTable("Adicionals");
                 });
@@ -99,16 +92,11 @@ namespace Data.Migrations
                     b.Property<int>("Qtd")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("SaborDrinkId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PedidoId");
 
                     b.HasIndex("ProdutoId");
-
-                    b.HasIndex("SaborDrinkId");
 
                     b.ToTable("Itens");
                 });
@@ -226,9 +214,6 @@ namespace Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Disponivel")
-                        .HasColumnType("boolean");
-
                     b.Property<int?>("DrinkId")
                         .HasColumnType("integer");
 
@@ -242,19 +227,11 @@ namespace Data.Migrations
                     b.ToTable("Sabores");
                 });
 
-            modelBuilder.Entity("AdicionalItem", b =>
+            modelBuilder.Entity("Domain.Entities.Adicional", b =>
                 {
-                    b.HasOne("Domain.Entities.Adicional", null)
-                        .WithMany()
-                        .HasForeignKey("AdicionalsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.Item", null)
-                        .WithMany()
-                        .HasForeignKey("ItensId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Adicionals")
+                        .HasForeignKey("ItemId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Item", b =>
@@ -271,15 +248,9 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Sabor", "SaborDrink")
-                        .WithMany()
-                        .HasForeignKey("SaborDrinkId");
-
                     b.Navigation("Pedido");
 
                     b.Navigation("Produto");
-
-                    b.Navigation("SaborDrink");
                 });
 
             modelBuilder.Entity("Domain.Entities.Pagamento", b =>
@@ -321,6 +292,11 @@ namespace Data.Migrations
             modelBuilder.Entity("Domain.Entities.Drink", b =>
                 {
                     b.Navigation("Sabores");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Item", b =>
+                {
+                    b.Navigation("Adicionals");
                 });
 
             modelBuilder.Entity("Domain.Entities.Pedido", b =>

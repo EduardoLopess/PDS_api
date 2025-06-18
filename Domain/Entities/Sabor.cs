@@ -9,6 +9,6 @@ namespace Domain.Entities
     {
         public int Id { get; set; }
         public string? NomeSabor { get; set; }
-        //public IList<Drink> Drinks { get; set; } 
+        public bool Disponivel { get; set; }
     }
 }

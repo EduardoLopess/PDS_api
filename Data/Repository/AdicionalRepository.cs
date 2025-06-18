@@ -60,5 +60,14 @@ namespace Data.Repository
                     _context.SaveChangesAsync();
             }
         }
+
+       
+
+        public async Task<List<Adicional>> BuscarAdicionaisAsync(List<int> adicionalIds)
+        {
+            return await _context.Adicionals
+                    .Where(a => adicionalIds.Contains(a.Id))
+                    .ToListAsync();
+        }
     }
 }

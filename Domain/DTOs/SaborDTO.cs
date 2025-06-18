@@ -9,6 +9,6 @@ namespace Domain.DTOs
     {
         public int Id { get; set; }
         public string? NomeSabor { get; set; }
-        //public IList<DrinkDTO> Drinks { get; set; }
+        public bool Disponivel { get; set; }
     }
 }

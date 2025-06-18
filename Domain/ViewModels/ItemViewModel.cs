@@ -6,5 +6,7 @@ namespace Domain.ViewModels
         public ProdutoViewModel? Produto { get; set; }
         public int Qtd { get; set; }
         public double PrecoUnitario { get; set; }
+        public IList<AdicionalViewModel?> Adicionais { get; set; }
+        
     }
 }

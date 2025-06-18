@@ -23,6 +23,9 @@ namespace api.Controllers
         public async Task<IActionResult> GetAll()
         {
             var adicional = await _adicionalRepository.GetAllAsync();
+            if (adicional == null || !adicional.Any())
+                return NotFound(new { message = "Não foi encontrado nenhum adicional." });
+
             var adicionalDTO = _mapper.Map<IList<AdicionalDTO>>(adicional);
 
             return HttpMessageOk(adicionalDTO);

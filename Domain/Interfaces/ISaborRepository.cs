@@ -9,5 +9,6 @@ namespace Domain.Interfaces
     public interface ISaborRepository : IBaseRepository<Sabor>
     {
         Task CreateSabor(Sabor entity);
+        Task<bool> MudarDisponibilidadeAsync(int entityId);
     }
 }
