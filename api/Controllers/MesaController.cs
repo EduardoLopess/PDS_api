@@ -45,18 +45,24 @@ namespace api.Controllers
         public async Task<IActionResult> CreateAsync([FromBody] MesaViewModel createModel)
         {
             if (!ModelState.IsValid)
-                return HttpMessageOk("Dados incorretos. ");
+                return HttpMessageError("Dados incorretos. ");
+                
+            try
+            {
+                var mesa = await _mesaService.CreateMesaService(createModel);
+                await _mesaRepository.CreateAsync(mesa);
+                var mesaDTO = _mapper.Map<MesaDTO>(mesa);
+                return HttpMessageOk(mesaDTO);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
 
-            var numeroMesa = createModel.NumeroMesa;
-            var numeroCadastrado = await _mesaService.NumeroCadastrado(numeroMesa);
-            if (numeroCadastrado)
-                return BadRequest("Número informado já existe.");
-
-            var mesa = _mapper.Map<Mesa>(createModel);
-            await _mesaRepository.CreateAsync(mesa);
-
-            var mesaDTO = _mapper.Map<MesaDTO>(mesa);
-            return HttpMessageOk(mesaDTO);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Falha cadastrar a MESA.", erro = ex.Message });
+            }
 
         }
 

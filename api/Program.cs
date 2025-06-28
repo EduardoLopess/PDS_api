@@ -32,12 +32,22 @@ builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IAdicionalRepository, AdicionalRepository>();
 // builder.Services.AddScoped<IItemRepository, IItemRepository>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:1420") // substitua pela porta do seu React
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 
 
 
 var app = builder.Build();
-
+app.UseCors("AllowFrontend");
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>

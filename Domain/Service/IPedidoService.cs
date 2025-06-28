@@ -10,6 +10,7 @@ namespace Domain.Service
         // Task<Pedido> AtualizarPedidoService(int pedidoId, CriarItemViewModel viewModel);
         Task<Pedido> AdicionarItemNovo(int pedidoId, CriarPedidoViewModel updateModel);
         Task<Pedido> RemoverItensAsync(int pedidoId, List<int> itemIds);
+        Task<Pedido> RemoverAdicional(int pedidoId, RemoverAdicionalViewModel model);
 
     }
 }

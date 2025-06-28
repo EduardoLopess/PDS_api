@@ -12,7 +12,12 @@ namespace Domain.Enums
         Refrigerante600,
         Suco,
         Drink,
-        Caipirinha
+        Caipirinha,
+        Salgado,
+        Doce,
+        Especial,
+        SemPeixe,
+        Peixe
 
     }
 }

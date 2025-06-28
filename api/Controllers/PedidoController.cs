@@ -38,7 +38,7 @@ namespace api.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             if (id <= 0)
-                return NotFound("Id não é vá  lido.");
+                return NotFound("Id não é válido.");
 
             var pedido = await _pedidoRepository.GetByIdAsync(id);
             if (pedido == null)
@@ -133,8 +133,8 @@ namespace api.Controllers
                     return HttpMessageOk("Pedido sem itens cancelado.");
                 }
 
-                var pedidoDTO = _mapper.Map<PedidoDTO>(pedidoAtualizado);
                 await _pedidoRepository.UpdateAsync(pedidoAtualizado);
+                var pedidoDTO = _mapper.Map<PedidoDTO>(pedidoAtualizado);
                 return HttpMessageOk(pedidoDTO);
             }
             catch (ArgumentException ex)
@@ -145,6 +145,32 @@ namespace api.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { message = "Falha ao remover item do pedido.", erro = ex.Message });
+            }
+        }
+
+
+        //Remover Adicional
+        [HttpPatch("{pedidoId}/remover-adicional")]
+        public async Task<IActionResult> RemoverAdicionalAsync(int pedidoId, [FromBody] RemoverAdicionalViewModel model)
+        {
+            if (pedidoId <= 0 || model.AdicionalId <= 0 || model.ProdutoId <= 0)
+                return BadRequest("Algum Id inválido");
+
+            try
+            {
+                var pedidoAtualizado = await _pedidoService.RemoverAdicional(pedidoId, model);
+                await _pedidoRepository.UpdateAsync(pedidoAtualizado);
+                var pedidoDTO = _mapper.Map<PedidoDTO>(pedidoAtualizado);
+                return HttpMessageOk(pedidoDTO);
+
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Falha ao remover o adicional." , erro = ex.Message });
             }
         }
         

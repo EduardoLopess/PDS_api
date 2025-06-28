@@ -178,12 +178,38 @@ namespace api.Validation
 
             foreach (var item in itensParaRemover)
             {
-                pedido.Itens.Remove(item);
+                if (item.Qtd > 1)
+                {
+                    item.Qtd -= 1;
+                }
+                else
+                {
+                    pedido.Itens.Remove(item);
+                }
+                // pedido.Itens.Remove(item);
             }
 
             return pedido;
 
-            
+        }
+
+        public async Task<Pedido>  RemoverAdicional(int pedidoId, RemoverAdicionalViewModel model)
+        {
+            var pedidoExiste = await _pedidoRepository.GetByIdAsync(pedidoId)
+                ?? throw new ArgumentException("Pedido não existe.");
+
+            var produtoId = model.ProdutoId;
+            var adicionalId = model.AdicionalId;
+
+            var produto = pedidoExiste.Itens.FirstOrDefault(p => p.ProdutoId == produtoId)
+                ?? throw new ArgumentException("Produto não foi encontrado.");
+
+            var adicional = produto.Adicionals.FirstOrDefault(a => a != null && a.Id == adicionalId)
+                ?? throw new ArgumentException("Adicional não foi encontrado para o produto.");
+
+            produto.Adicionals.Remove(adicional);
+
+            return pedidoExiste;
         }
     }
     
