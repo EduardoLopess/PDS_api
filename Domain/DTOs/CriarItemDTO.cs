@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Intrinsics.X86;
-using System.Threading.Tasks;
-
 namespace Domain.DTOs
 {
     public class CriarItemDTO
@@ -12,6 +6,6 @@ namespace Domain.DTOs
         public int ProdutoId { get; set; }
         public int Qtd { get; set; }
         public SaborDTO? SaborDrink { get; set; }
-        public List<AdicionalDTO> Adicionals { get; set; } // adicionais que vão aparecer na resposta
+        public List<AdicionalDTO?> Adicionals { get; set; } // adicionais que vão aparecer na resposta
     }
 }

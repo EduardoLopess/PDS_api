@@ -1,6 +1,7 @@
 using AutoMapper;
 using Domain.DTOs;
 using Domain.Entities;
+using Domain.InputModels;
 using Domain.Interfaces;
 using Domain.Service;
 using Domain.ViewModels;
@@ -69,12 +70,31 @@ namespace api.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro interno: " + ex.Message); 
+                Console.WriteLine("Erro interno: " + ex.Message);
                 return BadRequest(new { mensagem = "Falha ao criar o PEDIDO.", erro = ex.Message });
 
             }
-            
+
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AtualizarPedido(int id, [FromBody] AtualizarPedidoViewModel model)
+        {
+            if (id <= 0)
+                return BadRequest("Id inválido.");
+
+            try
+            {
+                var pedidoAtualizado = await _pedidoService.AtualizarPedidoCompleto(id, model);
+                await _pedidoRepository.UpdateAsync(pedidoAtualizado);
+                var pedidoDTO = _mapper.Map<PedidoDTO>(pedidoAtualizado);
+                return Ok(new { data = pedidoDTO });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Erro ao atualizar pedido.", erro = ex.Message });
+            }
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePedidoAsync(int id)
@@ -170,12 +190,12 @@ namespace api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Falha ao remover o adicional." , erro = ex.Message });
+                return BadRequest(new { message = "Falha ao remover o adicional.", erro = ex.Message });
             }
         }
-        
 
-   
+
+
 
         private IActionResult HttpMessageOk(dynamic data = null)
         {

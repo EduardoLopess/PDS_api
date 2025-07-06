@@ -1,5 +1,6 @@
 
 using Domain.Entities;
+using Domain.InputModels;
 using Domain.ViewModels;
 
 namespace Domain.Service
@@ -11,6 +12,7 @@ namespace Domain.Service
         Task<Pedido> AdicionarItemNovo(int pedidoId, CriarPedidoViewModel updateModel);
         Task<Pedido> RemoverItensAsync(int pedidoId, List<int> itemIds);
         Task<Pedido> RemoverAdicional(int pedidoId, RemoverAdicionalViewModel model);
+        Task<Pedido> AtualizarPedidoCompleto(int pedidoId, AtualizarPedidoViewModel model);
 
     }
 }

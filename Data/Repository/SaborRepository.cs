@@ -49,7 +49,7 @@ namespace Data.Repository
 
             return sabor;
         }
-
+    
         public async Task UpdateAsync(Sabor entity)
         {
             var existeSabor = await _context.Sabores

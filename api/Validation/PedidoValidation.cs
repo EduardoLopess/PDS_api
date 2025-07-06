@@ -1,6 +1,7 @@
 using System.Net.NetworkInformation;
 using AutoMapper;
 using Domain.Entities;
+using Domain.InputModels;
 using Domain.Interfaces;
 using Domain.Service;
 using Domain.ViewModels;
@@ -193,7 +194,7 @@ namespace api.Validation
 
         }
 
-        public async Task<Pedido>  RemoverAdicional(int pedidoId, RemoverAdicionalViewModel model)
+        public async Task<Pedido> RemoverAdicional(int pedidoId, RemoverAdicionalViewModel model)
         {
             var pedidoExiste = await _pedidoRepository.GetByIdAsync(pedidoId)
                 ?? throw new ArgumentException("Pedido não existe.");
@@ -211,6 +212,76 @@ namespace api.Validation
 
             return pedidoExiste;
         }
+
+        public async Task<Pedido> AtualizarPedidoCompleto(int pedidoId, AtualizarPedidoViewModel model)
+        {
+            var pedido = await _pedidoRepository.GetByIdAsync(pedidoId)
+                ?? throw new ArgumentException("Pedido não encontrado");
+
+            var mesaExiste = await _mesaService.MesaExiste(model.MesaId);
+            if (!mesaExiste)
+                throw new ArgumentException("Mesa informada não existe.");
+
+            if (pedido.Mesa == null || pedido.Mesa.Id != model.MesaId)
+            {
+                var mesa = await _mesaRepository.GetByIdAsync(model.MesaId);
+                if (mesa == null)
+                    throw new ArgumentException("Mesa não encontrada");
+                pedido.Mesa = mesa;
+            }
+
+            pedido.Itens.Clear();
+
+            var produtoIds = model.Itens.Select(i => i.ProdutoId).ToList();
+            var produtos = await _produtoRepository.BuscarPorIdsAsync(produtoIds);
+
+            var adicionalIds = model.Itens
+                .SelectMany(i => i.AdicionalIDs ?? new List<int?>())
+                .Where(id => id.HasValue)
+                .Select(id => id.Value)
+                .Distinct()
+                .ToList();
+
+            var adicionais = await _adicionalRepository.BuscarAdicionaisAsync(adicionalIds);
+            foreach (var itemModel in model.Itens)
+            {
+                var produto = produtos.FirstOrDefault(p => p.Id == itemModel.ProdutoId);
+                if (produto == null)
+                    throw new ArgumentException($"Produto com ID {itemModel.ProdutoId} não encontrado.");
+
+                var novoItem = new Item
+                {
+                    ProdutoId = itemModel.ProdutoId,
+                    Qtd = itemModel.Qtd,
+                    PrecoUnitario = produto.PrecoProduto,
+                    Produto = produto
+                };
+
+                // Adicionais
+                if (itemModel.AdicionalIDs != null)
+                {
+                    novoItem.Adicionals = adicionais
+                        .Where(a => itemModel.AdicionalIDs.Contains(a.Id))
+                        .ToList();
+                }
+
+                // Sabor (se houver)
+                if (itemModel.SaborDrinkId.HasValue)
+                {
+                    var sabor = await _saborRepository.GetByIdAsync(itemModel.SaborDrinkId.Value);
+                    if (sabor == null)
+                        throw new ArgumentException($"Sabor com ID {itemModel.SaborDrinkId.Value} não encontrado.");
+
+                    novoItem.SaborDrink = sabor;
+                }
+
+                pedido.Itens.Add(novoItem);
+            }
+
+            return pedido;
+        }
+
     }
     
+
 }

@@ -11,7 +11,7 @@ namespace Domain.ViewModels
 
         public string? NomeSabor { get; set; }
         public bool Disponivel { get; set; }
-        public ProdutoViewModel? ProdutoDrink { get; set; }
+        // public ProdutoViewModel? ProdutoDrink { get; set; }
         
     }
 }
