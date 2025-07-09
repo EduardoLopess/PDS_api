@@ -137,3 +137,5 @@ C:\Edu\Projetos\api\api\obj\Debug\net9.0\ref\api.dll
 C:\Edu\Projetos\api\api\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Edu\Projetos\api\api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Edu\Projetos\api\api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Edu\Projetos\api\api\bin\Debug\net9.0\Newtonsoft.Json.dll
+C:\Edu\Projetos\api\api\bin\Debug\net9.0\System.Net.WebSockets.WebSocketProtocol.dll

@@ -1,4 +1,5 @@
 using api.Configuration;
+using api.RealtimeHubs;
 using api.Validation;
 using Data;
 using Data.Repository;
@@ -34,20 +35,24 @@ builder.Services.AddScoped<IAdicionalRepository, AdicionalRepository>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:1420") // substitua pela porta do seu React
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+    options.AddPolicy("DefaultPolicy", builder =>
+    {
+        builder
+            .WithOrigins("http://localhost:1420", "http://192.168.5.5:1420") // coloque aqui todos os frontends
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // <- ISSO É O QUE FALTAVA
+    });
 });
 
 
-
+builder.Services.AddSignalR();
 
 var app = builder.Build();
-app.UseCors("AllowFrontend");
+
+
+
+app.UseCors("DefaultPolicy");
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -62,6 +67,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers(); // <-- ESSENCIAL para rotas funcionarem
+app.MapHub<PedidoHub>("/pedidoHub");
+
 
 // app.UseHttpsRedirection();
 

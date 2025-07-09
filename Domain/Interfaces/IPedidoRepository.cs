@@ -9,5 +9,6 @@ namespace Domain.Interfaces
     public interface IPedidoRepository : IBaseRepository<Pedido>
     {
         Task CreatePedidoAsync(Pedido entity);
+        Task<Pedido?> BuscarPedidoAtivoMesaAsync(int mesaId);
     }
 }

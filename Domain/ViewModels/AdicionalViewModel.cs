@@ -9,5 +9,7 @@ namespace Domain.ViewModels
     {
         public string AdicionalNome { get; set; }
         public double PrecoAdicional { get; set; }
+        public bool DisponibilidadeAdicional { get; set; }
     }
 }
+

@@ -11,6 +11,8 @@ namespace Data.Repository
         {
             _context = context;
         }
+
+
         public async Task CreatePedidoAsync(Pedido entity)
         {
             _context.Pedidos.Add(entity);
@@ -33,7 +35,7 @@ namespace Data.Repository
             return await _context.Pedidos
                 .Include(p => p.Mesa)
                 .Include(p => p.Itens).ThenInclude(i => i.Produto)
-                .Include(p => p.Itens).ThenInclude(i => i.Adicionals) 
+                .Include(p => p.Itens).ThenInclude(i => i.Adicionals)
                 .Include(p => p.Itens).ThenInclude(i => i.SaborDrink)
                 .ToListAsync();
 
@@ -60,6 +62,16 @@ namespace Data.Repository
                 await
                     _context.SaveChangesAsync();
             }
+        }
+
+        public async  Task<Pedido?> BuscarPedidoAtivoMesaAsync(int mesaId)
+        {
+            return await _context.Pedidos
+                .Include(p => p.Itens).ThenInclude(i => i.Produto)
+                .Include(p => p.Itens).ThenInclude(i => i.Adicionals)
+                .Include(p => p.Itens).ThenInclude(i => i.SaborDrink)
+                .Include(p => p.Mesa)
+                .FirstOrDefaultAsync(p => p.Mesa.Id == mesaId );
         }
     }
 }

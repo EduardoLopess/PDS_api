@@ -1,3 +1,4 @@
+using api.RealtimeHubs;
 using AutoMapper;
 using Domain.DTOs;
 using Domain.Entities;
@@ -6,6 +7,7 @@ using Domain.Interfaces;
 using Domain.Service;
 using Domain.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace api.Controllers
 {
@@ -17,13 +19,15 @@ namespace api.Controllers
         private readonly IMesaService _mesaService;
         private readonly IPedidoService _pedidoService;
         private readonly IMapper _mapper;
+        private readonly IHubContext<PedidoHub> _hubContext;
 
-        public PedidoController(IPedidoRepository pedidoRepository, IMesaService mesaService, IPedidoService pedidoService, IMapper mapper)
+        public PedidoController(IPedidoRepository pedidoRepository, IMesaService mesaService, IPedidoService pedidoService, IMapper mapper, IHubContext<PedidoHub> hubContext)
         {
             _pedidoRepository = pedidoRepository;
             _mesaService = mesaService;
             _pedidoService = pedidoService;
             _mapper = mapper;
+            _hubContext = hubContext; // Injetar aqui!
         }
 
         [HttpGet]
@@ -62,6 +66,7 @@ namespace api.Controllers
                 await _pedidoRepository.CreatePedidoAsync(pedidoCriado);
                 var pedidoDTO = _mapper.Map<CriarPedidoDTO>(pedidoCriado);
                 await _mesaService.MudaStatusMesaAsync(pedidoCriado.Mesa.Id);
+                await _hubContext.Clients.All.SendAsync("PedidoCriado", pedidoDTO);
                 return HttpMessageOk(pedidoDTO);
             }
             catch (ArgumentException ex)
@@ -76,6 +81,7 @@ namespace api.Controllers
             }
 
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> AtualizarPedido(int id, [FromBody] AtualizarPedidoViewModel model)
         {
@@ -87,6 +93,8 @@ namespace api.Controllers
                 var pedidoAtualizado = await _pedidoService.AtualizarPedidoCompleto(id, model);
                 await _pedidoRepository.UpdateAsync(pedidoAtualizado);
                 var pedidoDTO = _mapper.Map<PedidoDTO>(pedidoAtualizado);
+                await _hubContext.Clients.All.SendAsync("PedidoAtualizado", pedidoDTO);
+
                 return Ok(new { data = pedidoDTO });
             }
             catch (Exception ex)
@@ -105,6 +113,7 @@ namespace api.Controllers
 
             await _pedidoRepository.DeleteAsync(id);
             await _mesaService.MudaStatusMesaAsync(pedido.Mesa.Id);
+            await _hubContext.Clients.All.SendAsync("PedidoCancelado", id);
             return HttpMessageOk("Pedido deletado com sucesso.");
         }
 
@@ -123,6 +132,7 @@ namespace api.Controllers
                 var pedidoComItemNovo = await _pedidoService.AdicionarItemNovo(id, upateModel);
                 var pedidoDTO = _mapper.Map<CriarPedidoDTO>(pedidoComItemNovo);
                 await _pedidoRepository.UpdateAsync(pedidoComItemNovo);
+                await _hubContext.Clients.All.SendAsync("PedidoAtualizado", pedidoDTO);
                 return HttpMessageOk(pedidoDTO);
             }
             catch (ArgumentException ex)
@@ -155,6 +165,7 @@ namespace api.Controllers
 
                 await _pedidoRepository.UpdateAsync(pedidoAtualizado);
                 var pedidoDTO = _mapper.Map<PedidoDTO>(pedidoAtualizado);
+                await _hubContext.Clients.All.SendAsync("PedidoAtualizado", pedidoDTO);
                 return HttpMessageOk(pedidoDTO);
             }
             catch (ArgumentException ex)
@@ -181,6 +192,7 @@ namespace api.Controllers
                 var pedidoAtualizado = await _pedidoService.RemoverAdicional(pedidoId, model);
                 await _pedidoRepository.UpdateAsync(pedidoAtualizado);
                 var pedidoDTO = _mapper.Map<PedidoDTO>(pedidoAtualizado);
+                await _hubContext.Clients.All.SendAsync("PedidoAtualizado", pedidoDTO);
                 return HttpMessageOk(pedidoDTO);
 
             }
@@ -192,6 +204,17 @@ namespace api.Controllers
             {
                 return BadRequest(new { message = "Falha ao remover o adicional.", erro = ex.Message });
             }
+        }
+
+        [HttpGet("mesa/{mesaId}")]
+        public async Task<IActionResult> GetPedidoByMesa(int mesaId)
+        {
+            var pedido = await _pedidoRepository.BuscarPedidoAtivoMesaAsync(mesaId);
+            if (pedido == null)
+                return NotFound("Nenhum pedido ativo para essa mesa.");
+
+            var viewModel = _mapper.Map<PedidoViewModel>(pedido);
+            return HttpMessageOk(viewModel);
         }
 
 

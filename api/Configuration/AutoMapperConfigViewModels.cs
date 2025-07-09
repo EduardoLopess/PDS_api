@@ -19,9 +19,17 @@ namespace api.Configuration
             CreateMap<PedidoViewModel, Pedido>();
             CreateMap<AdicionalViewModel, Adicional>();
 
+
+            CreateMap<Pedido, PedidoViewModel>();
+            CreateMap<Item, ItemViewModel>(); // <-- ESTE resolve seu erro
+            CreateMap<Produto, ProdutoViewModel>(); // (se necessário)
+            CreateMap<Sabor, SaborViewModel>(); // (se necessário)
+            CreateMap<Adicional, AdicionalViewModel>(); // (se necessário)
+            CreateMap<Mesa, MesaViewModel>(); // ← ENTIDADE → ViewModel
+
             CreateMap<CriarPedidoViewModel, Pedido>();
             CreateMap<CriarItemViewModel, Item>();
         }
-        
+
     }
 }
