@@ -12,12 +12,10 @@ namespace Data.Repository
             _context = context;
         }
 
-
         public async Task CreatePedidoAsync(Pedido entity)
         {
             _context.Pedidos.Add(entity);
-            await
-                _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int entityId)
@@ -35,10 +33,9 @@ namespace Data.Repository
             return await _context.Pedidos
                 .Include(p => p.Mesa)
                 .Include(p => p.Itens).ThenInclude(i => i.Produto)
-                .Include(p => p.Itens).ThenInclude(i => i.Adicionals)
+                .Include(p => p.Itens).ThenInclude(i => i.ItemAdicionais).ThenInclude(ia => ia.Adicional)
                 .Include(p => p.Itens).ThenInclude(i => i.SaborDrink)
                 .ToListAsync();
-
         }
 
         public async Task<Pedido?> GetByIdAsync(int entityId)
@@ -46,8 +43,8 @@ namespace Data.Repository
             var pedido = await _context.Pedidos
                         .Include(p => p.Mesa)
                         .Include(p => p.Itens).ThenInclude(i => i.Produto)
-                        .Include(a => a.Itens).ThenInclude(a => a.Adicionals)
-                        .Include(s => s.Itens).ThenInclude(s => s.SaborDrink)
+                        .Include(p => p.Itens).ThenInclude(i => i.ItemAdicionais).ThenInclude(ia => ia.Adicional)
+                        .Include(p => p.Itens).ThenInclude(i => i.SaborDrink)
                         .SingleOrDefaultAsync(p => p.Id == entityId);
             return pedido;
         }
@@ -55,23 +52,21 @@ namespace Data.Repository
         public async Task UpdateAsync(Pedido entity)
         {
             var pedidoExiste = await _context.Pedidos.FirstOrDefaultAsync(p => p.Id == entity.Id);
-
             if (pedidoExiste != null)
             {
                 _context.Entry(pedidoExiste).CurrentValues.SetValues(entity);
-                await
-                    _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
         }
 
-        public async  Task<Pedido?> BuscarPedidoAtivoMesaAsync(int mesaId)
+        public async Task<Pedido?> BuscarPedidoAtivoMesaAsync(int mesaId)
         {
             return await _context.Pedidos
                 .Include(p => p.Itens).ThenInclude(i => i.Produto)
-                .Include(p => p.Itens).ThenInclude(i => i.Adicionals)
+                .Include(p => p.Itens).ThenInclude(i => i.ItemAdicionais).ThenInclude(ia => ia.Adicional)
                 .Include(p => p.Itens).ThenInclude(i => i.SaborDrink)
                 .Include(p => p.Mesa)
-                .FirstOrDefaultAsync(p => p.Mesa.Id == mesaId );
+                .FirstOrDefaultAsync(p => p.Mesa.Id == mesaId);
         }
     }
 }

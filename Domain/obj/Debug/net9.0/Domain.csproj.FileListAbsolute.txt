@@ -9,3 +9,15 @@ C:\Edu\Projetos\api\Domain\obj\Debug\net9.0\Domain.dll
 C:\Edu\Projetos\api\Domain\obj\Debug\net9.0\refint\Domain.dll
 C:\Edu\Projetos\api\Domain\obj\Debug\net9.0\Domain.pdb
 C:\Edu\Projetos\api\Domain\obj\Debug\net9.0\ref\Domain.dll
+C:\Edu\Projetos\PDS_api\Domain\bin\Debug\net9.0\Domain.deps.json
+C:\Edu\Projetos\PDS_api\Domain\bin\Debug\net9.0\Domain.dll
+C:\Edu\Projetos\PDS_api\Domain\bin\Debug\net9.0\Domain.pdb
+C:\Edu\Projetos\PDS_api\Domain\obj\Debug\net9.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Edu\Projetos\PDS_api\Domain\obj\Debug\net9.0\Domain.AssemblyInfoInputs.cache
+C:\Edu\Projetos\PDS_api\Domain\obj\Debug\net9.0\Domain.AssemblyInfo.cs
+C:\Edu\Projetos\PDS_api\Domain\obj\Debug\net9.0\Domain.csproj.CoreCompileInputs.cache
+C:\Edu\Projetos\PDS_api\Domain\obj\Debug\net9.0\Domain.sourcelink.json
+C:\Edu\Projetos\PDS_api\Domain\obj\Debug\net9.0\Domain.dll
+C:\Edu\Projetos\PDS_api\Domain\obj\Debug\net9.0\refint\Domain.dll
+C:\Edu\Projetos\PDS_api\Domain\obj\Debug\net9.0\Domain.pdb
+C:\Edu\Projetos\PDS_api\Domain\obj\Debug\net9.0\ref\Domain.dll

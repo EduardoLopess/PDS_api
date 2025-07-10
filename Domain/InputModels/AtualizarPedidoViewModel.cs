@@ -10,6 +10,7 @@ namespace Domain.InputModels
     {
         public int MesaId { get; set; }
         public List<AtualizarItemViewModel> Itens { get; set; }
+        public double TotalPedido { get; set; }
         
     }
 }

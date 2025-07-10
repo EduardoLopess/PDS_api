@@ -17,6 +17,7 @@ namespace Data
         public DbSet<Sabor> Sabores { get; set; }
         public DbSet<Pagamento> Pagamentos { get; set; }
         public DbSet<Adicional> Adicionals { get; set; }
+        public DbSet<ItemAdicional> ItemAdicionais { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

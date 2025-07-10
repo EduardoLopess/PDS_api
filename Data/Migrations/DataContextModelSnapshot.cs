@@ -22,21 +22,6 @@ namespace Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("AdicionalItem", b =>
-                {
-                    b.Property<int>("AdicionalsId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ItensId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AdicionalsId", "ItensId");
-
-                    b.HasIndex("ItensId");
-
-                    b.ToTable("AdicionalItem");
-                });
-
             modelBuilder.Entity("Domain.Entities.Adicional", b =>
                 {
                     b.Property<int>("Id")
@@ -90,6 +75,9 @@ namespace Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AdicionalId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("PedidoId")
                         .HasColumnType("integer");
 
@@ -107,6 +95,8 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AdicionalId");
+
                     b.HasIndex("PedidoId");
 
                     b.HasIndex("ProdutoId");
@@ -114,6 +104,32 @@ namespace Data.Migrations
                     b.HasIndex("SaborDrinkId");
 
                     b.ToTable("Itens");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ItemAdicional", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AdicionalId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Qtd")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdicionalId");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("ItemAdicionais");
                 });
 
             modelBuilder.Entity("Domain.Entities.Mesa", b =>
@@ -245,23 +261,12 @@ namespace Data.Migrations
                     b.ToTable("Sabores");
                 });
 
-            modelBuilder.Entity("AdicionalItem", b =>
-                {
-                    b.HasOne("Domain.Entities.Adicional", null)
-                        .WithMany()
-                        .HasForeignKey("AdicionalsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Item", null)
-                        .WithMany()
-                        .HasForeignKey("ItensId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Entities.Item", b =>
                 {
+                    b.HasOne("Domain.Entities.Adicional", null)
+                        .WithMany("Itens")
+                        .HasForeignKey("AdicionalId");
+
                     b.HasOne("Domain.Entities.Pedido", "Pedido")
                         .WithMany("Itens")
                         .HasForeignKey("PedidoId")
@@ -283,6 +288,25 @@ namespace Data.Migrations
                     b.Navigation("Produto");
 
                     b.Navigation("SaborDrink");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ItemAdicional", b =>
+                {
+                    b.HasOne("Domain.Entities.Adicional", "Adicional")
+                        .WithMany()
+                        .HasForeignKey("AdicionalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Item", "Item")
+                        .WithMany("ItemAdicionais")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Adicional");
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("Domain.Entities.Pagamento", b =>
@@ -321,9 +345,19 @@ namespace Data.Migrations
                         .HasForeignKey("DrinkId");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Adicional", b =>
+                {
+                    b.Navigation("Itens");
+                });
+
             modelBuilder.Entity("Domain.Entities.Drink", b =>
                 {
                     b.Navigation("Sabores");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Item", b =>
+                {
+                    b.Navigation("ItemAdicionais");
                 });
 
             modelBuilder.Entity("Domain.Entities.Pedido", b =>

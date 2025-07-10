@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Edu\\Projetos\\api\\Data\\Data.csproj": {}
+    "C:\\Edu\\Projetos\\PDS_api\\Data\\Data.csproj": {}
   },
   "projects": {
-    "C:\\Edu\\Projetos\\api\\Data\\Data.csproj": {
+    "C:\\Edu\\Projetos\\PDS_api\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Edu\\Projetos\\api\\Data\\Data.csproj",
+        "projectUniqueName": "C:\\Edu\\Projetos\\PDS_api\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "C:\\Edu\\Projetos\\api\\Data\\Data.csproj",
+        "projectPath": "C:\\Edu\\Projetos\\PDS_api\\Data\\Data.csproj",
         "packagesPath": "C:\\Users\\dudul\\.nuget\\packages\\",
-        "outputPath": "C:\\Edu\\Projetos\\api\\Data\\obj\\",
+        "outputPath": "C:\\Edu\\Projetos\\PDS_api\\Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dudul\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -26,8 +26,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Edu\\Projetos\\api\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Edu\\Projetos\\api\\Domain\\Domain.csproj"
+              "C:\\Edu\\Projetos\\PDS_api\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Edu\\Projetos\\PDS_api\\Domain\\Domain.csproj"
               }
             }
           }
@@ -83,14 +83,14 @@
         }
       }
     },
-    "C:\\Edu\\Projetos\\api\\Domain\\Domain.csproj": {
+    "C:\\Edu\\Projetos\\PDS_api\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Edu\\Projetos\\api\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Edu\\Projetos\\PDS_api\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "C:\\Edu\\Projetos\\api\\Domain\\Domain.csproj",
+        "projectPath": "C:\\Edu\\Projetos\\PDS_api\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\dudul\\.nuget\\packages\\",
-        "outputPath": "C:\\Edu\\Projetos\\api\\Domain\\obj\\",
+        "outputPath": "C:\\Edu\\Projetos\\PDS_api\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dudul\\AppData\\Roaming\\NuGet\\NuGet.Config"

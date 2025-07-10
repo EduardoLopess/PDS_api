@@ -10,5 +10,6 @@ namespace Domain.ViewModels
         public int MesaId { get; set; }
         public DateTime DateTime { get; set; }
         public List<CriarItemViewModel> Itens { get; set; }
+        public double TotalPedido { get; set; }
     }
 }

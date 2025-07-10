@@ -9,6 +9,7 @@ namespace Domain.DTOs
         public DateTime DateTime { get; set; }
         public string DateTimeFormatado { get; set; }
         public double TotalPedido { get; set; }
+        public string TotalPedidoFormatado { get; set; }
 
         public IList<ItemDTO?> Itens { get; set; }
     }

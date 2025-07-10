@@ -11,6 +11,7 @@ namespace Domain.DTOs
         public string? AdicionalNome { get; set; }
         public double PrecoAdicional { get; set; }
         public string? PrecoAdicionalFormatado { get; set; }
-        public bool DisponibilidadeAdicional  { get; set; }
+        public bool DisponibilidadeAdicional { get; set; }
+        public int Quantidade { get; set; }
     }
 }

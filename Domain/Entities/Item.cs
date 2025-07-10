@@ -16,7 +16,7 @@ namespace Domain.Entities
         public int Qtd { get; set; }
         public double PrecoUnitario { get; set; }
         public Sabor? SaborDrink { get; set; }
-        public IList<Adicional?> Adicionals { get; set; }
-        
+        public IList<ItemAdicional?> ItemAdicionais { get; set; } = new List<ItemAdicional?>();
+
     }
 }
