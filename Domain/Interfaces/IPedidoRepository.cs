@@ -10,5 +10,8 @@ namespace Domain.Interfaces
     {
         Task CreatePedidoAsync(Pedido entity);
         Task<Pedido?> BuscarPedidoAtivoMesaAsync(int mesaId);
+        Task<bool> TentarBloquearPedidoAsync(int pedidoId, string connectionIdDoCliente);
+        Task<bool> DesbloquearPedidoAsync(int pedidoId, string connectionIdDoCliente);
+        // Task<Pedido> AtualizarMesaPedido(int pedidoId, int mesaId);
     }
 }

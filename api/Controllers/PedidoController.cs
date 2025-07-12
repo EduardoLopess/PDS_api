@@ -94,7 +94,6 @@ namespace api.Controllers
                 await _pedidoRepository.UpdateAsync(pedidoAtualizado);
                 var pedidoDTO = _mapper.Map<PedidoDTO>(pedidoAtualizado);
                 await _hubContext.Clients.All.SendAsync("PedidoAtualizado", pedidoDTO);
-
                 return Ok(new { data = pedidoDTO });
             }
             catch (Exception ex)
@@ -133,6 +132,7 @@ namespace api.Controllers
                 var pedidoDTO = _mapper.Map<CriarPedidoDTO>(pedidoComItemNovo);
                 await _pedidoRepository.UpdateAsync(pedidoComItemNovo);
                 await _hubContext.Clients.All.SendAsync("PedidoAtualizado", pedidoDTO);
+
                 return HttpMessageOk(pedidoDTO);
             }
             catch (ArgumentException ex)
@@ -209,13 +209,136 @@ namespace api.Controllers
         [HttpGet("mesa/{mesaId}")]
         public async Task<IActionResult> GetPedidoByMesa(int mesaId)
         {
-            var pedido = await _pedidoRepository.BuscarPedidoAtivoMesaAsync(mesaId);
-            if (pedido == null)
-                return NotFound("Nenhum pedido ativo para essa mesa.");
 
-            var viewModel = _mapper.Map<PedidoViewModel>(pedido);
-            return HttpMessageOk(viewModel);
+            try
+            {
+                var pedido = await _pedidoRepository.BuscarPedidoAtivoMesaAsync(mesaId);
+                if (pedido == null)
+                    return NotFound("Nenhum pedido ativo para essa mesa.");
+                var viewModel = _mapper.Map<PedidoViewModel>(pedido);
+                return HttpMessageOk(viewModel);
+
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Falha cadastrar a MESA.", erro = ex.Message });
+            }
+
+
         }
+
+
+        //CONTROLE DE EDIÇÂO
+
+        [HttpPost("{id}/desbloquear")]
+        public async Task<IActionResult> LiberarPedidoEdicao(int id, [FromBody] ConnectionIdRequestModel request)
+        {
+
+            if (id <= 0)
+                return BadRequest("Id inválido");
+
+            if (request == null || string.IsNullOrWhiteSpace(request.ConnectionIdDoCliente))
+                return BadRequest("Id da conexão é obragatório.");
+
+            var liberadoPedido = await _pedidoService.DesbloquearPedidoAsync(id, request.ConnectionIdDoCliente);
+
+            if (!liberadoPedido)
+            {
+                var pedidoAtual = await _pedidoRepository.GetByIdAsync(id);
+                if (pedidoAtual == null)
+                {
+                    return NotFound("Pedido não encontrado.");
+                }
+                else if (pedidoAtual.StatusPedido == true && pedidoAtual.ConnectionId != request.ConnectionIdDoCliente)
+                {
+                    return Forbid("Sem permissão para liberar este pedido");
+                }
+
+                return StatusCode(500, "Falha interna ao tentar liberar o pedido");
+            }
+
+            var pedidoDTO = _mapper.Map<PedidoDTO>(await _pedidoRepository.GetByIdAsync(id));
+            await _hubContext.Clients.All.SendAsync("PedidoStatusAlterado", pedidoDTO);
+            return HttpMessageOk(new { message = "Pedido liberadoo com sucesso.", data = pedidoDTO });
+
+
+        }
+
+        [HttpPost("{id}/bloquear")]
+        public async Task<IActionResult> BloquearPedidoEdicao(int id, [FromBody] ConnectionIdRequestModel request)
+        {
+
+            if (id <= 0)
+                return BadRequest("ID do pedido inválido.");
+            if (request == null || string.IsNullOrWhiteSpace(request.ConnectionIdDoCliente))
+                return BadRequest("ID da conexão do cliente obrigatória.");
+
+            try
+            {
+                var desbloqueadoCoSucesso = await _pedidoRepository.TentarBloquearPedidoAsync(id, request.ConnectionIdDoCliente);
+
+                if (!desbloqueadoCoSucesso)
+                {
+                    var pedidoAtual = await _pedidoRepository.GetByIdAsync(id);
+
+                    if (pedidoAtual == null)
+                    {
+                        return NotFound("Pedido não encontrado.");
+                    }
+                    else if (pedidoAtual.StatusPedido == true && pedidoAtual.ConnectionId != request.ConnectionIdDoCliente)
+                    {
+                        return Conflict("Pedido já está em edição.");
+                    }
+                    return StatusCode(500, "Falha ao tentar bloquear o pedido.");
+                }
+
+                var pedidoDTO = _mapper.Map<PedidoDTO>(await _pedidoRepository.GetByIdAsync(id));
+                await _hubContext.Clients.All.SendAsync("PedidoStatusAlterado", pedidoDTO);
+                return HttpMessageOk(new { message = "Pedido bloquado com sucesso.", data = pedidoDTO });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Falha ao bloquear pedido.", erro = ex.Message });
+            }
+
+
+
+        }
+
+        [HttpPatch("{pedidoId}/mudar/mesa")]
+        public async Task<IActionResult> MudarMesaPedido(int pedidoId, [FromBody] int mesaId)
+        {
+            if (pedidoId < 0)
+                return BadRequest("Id do pedido inválido.");
+
+            if (mesaId < 0)
+                return BadRequest("Id mesa inválido.");
+
+            try
+            {
+                var atualizarMesaPedido = await _pedidoService.AtualizarMesaPedido(pedidoId, mesaId);
+                var pedidoDTO = _mapper.Map<PedidoDTO>(atualizarMesaPedido);
+                await _hubContext.Clients.All.SendAsync("MesaPedidoAtualizada", pedidoDTO);
+                
+                return HttpMessageOk(new { message = "Pedido atualizado com sucesso.", data = pedidoDTO });
+
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Falha cadastrar a MESA.", erro = ex.Message });
+            }
+        }
+
+
+
 
 
 

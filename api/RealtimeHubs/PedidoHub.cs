@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 
@@ -27,6 +23,16 @@ namespace api.RealtimeHubs
         public async Task NovaNotificacao(string mensagem)
         {
             await Clients.All.SendAsync("NovaNotificacao", mensagem);
+        }
+
+        public async Task PedidoStatusAlterado(Pedido pedido)
+        {
+            await Clients.All.SendAsync("PedidoStatusAlterado", pedido);
+        }
+
+        public async Task MesaPedidoAtualizada(Pedido pedido)
+        {
+            await Clients.All.SendAsync("MesaPedidoAtualizada", pedido);
         }
 
     }

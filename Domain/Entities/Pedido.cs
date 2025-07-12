@@ -7,5 +7,7 @@ namespace Domain.Entities
         public DateTime DateTime { get; set; }
         public double TotalPedido { get; set; }
         public IList<Item?> Itens { get; set; }
+        public bool StatusPedido { get; set; }
+        public string? ConnectionId { get; set; }
     }
 }

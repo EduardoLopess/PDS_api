@@ -5,6 +5,7 @@ using Domain.InputModels;
 using Domain.Interfaces;
 using Domain.Service;
 using Domain.ViewModels;
+using Xunit.Sdk;
 
 
 namespace api.Validation
@@ -307,6 +308,45 @@ namespace api.Validation
             return pedido;
         }
 
+
+        public async Task<bool> TentarBloquearPedidoAsync(int pedidoId, string connectionIdDoCliente)
+        {
+            return await _pedidoRepository.TentarBloquearPedidoAsync(pedidoId, connectionIdDoCliente);
+        }
+
+        public async Task<bool> DesbloquearPedidoAsync(int pedidoId, string connectionIdDoCliente)
+        {
+            return await _pedidoRepository.DesbloquearPedidoAsync(pedidoId, connectionIdDoCliente);
+        }
+
+        public async Task<Pedido> AtualizarMesaPedido(int pedidoId, int mesaId)
+        {
+
+            var pedido = await _pedidoRepository.GetByIdAsync(pedidoId)
+                ?? throw new ArgumentException("Pedido não encontrado.");
+
+            if (pedido.StatusPedido)
+                throw new ArgumentException("Pedido está sendo editado.");
+
+            var mesaAntiga = pedido.Mesa;
+
+            var mesaNova = await _mesaRepository.GetByIdAsync(mesaId)
+                ?? throw new ArgumentException("Mesa não encontrada.");
+
+            var mesaOcupada = await _mesaService.MesaOcupada(mesaNova.Id);
+            if (mesaOcupada)
+                throw new InvalidOperationException("Mesa já está ocupada.");
+
+            pedido.Mesa = mesaNova;
+
+            await _mesaService.MudaStatusMesaAsync(mesaNova.Id);
+            await _mesaService.MudaStatusMesaAsync(mesaAntiga.Id);
+
+            await _pedidoRepository.UpdateAsync(pedido);
+            return pedido;
+
+
+        }
     }
 
 
