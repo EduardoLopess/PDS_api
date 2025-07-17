@@ -255,7 +255,7 @@ namespace api.Controllers
                 }
                 else if (pedidoAtual.StatusPedido == true && pedidoAtual.ConnectionId != request.ConnectionIdDoCliente)
                 {
-                    return Forbid("Sem permissão para liberar este pedido");
+                    return BadRequest("Sem permissão para liberar este pedido");
                 }
 
                 return StatusCode(500, "Falha interna ao tentar liberar o pedido");

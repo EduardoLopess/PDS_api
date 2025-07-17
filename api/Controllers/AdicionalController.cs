@@ -1,9 +1,11 @@
+using api.RealtimeHubs;
 using AutoMapper;
 using Domain.DTOs;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace api.Controllers
 {
@@ -13,10 +15,13 @@ namespace api.Controllers
     {
         private readonly IAdicionalRepository _adicionalRepository;
         private readonly IMapper _mapper;
-        public AdicionalController(IAdicionalRepository adicionalRepository, IMapper mapper)
+        private readonly IHubContext<AdicionalHub> _hubContext;
+
+        public AdicionalController(IAdicionalRepository adicionalRepository, IMapper mapper, IHubContext<AdicionalHub> hubContext)
         {
             _adicionalRepository = adicionalRepository;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -69,6 +74,23 @@ namespace api.Controllers
             await _adicionalRepository.UpdateAsync(adicional);
 
             var adicionalDTO = _mapper.Map<AdicionalDTO>(adicional);
+
+            string tipoAtalizacao = string.Empty;
+            if (!adicional.DisponibilidadeAdicional)
+            {
+                tipoAtalizacao = "AdicionalAtualizado";
+            }
+            else
+            {
+                tipoAtalizacao = "AdicionalAtualizado";
+            }
+
+            await _hubContext.Clients.All.SendAsync("AdicionalAtualizado", new
+            {
+                adicional = adicionalDTO,
+                tipo = tipoAtalizacao
+            });
+
             return
                 HttpMessageOk(adicionalDTO);
         }

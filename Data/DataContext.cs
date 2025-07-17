@@ -23,11 +23,12 @@ namespace Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // Coloque aqui sua connection string
-                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=quiosque;Username=postgres;Password=EduLopes1711");
+                
+                optionsBuilder.UseNpgsql("Host=ep-green-snow-acmh1wuh-pooler.sa-east-1.aws.neon.tech;Port=5432;Database=neondb;Username=neondb_owner;Password=npg_zB24fJNDLWQO;SSL Mode=Require;Trust Server Certificate=true");
             }
         }
 
+      
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Produto>(entity =>
@@ -40,6 +41,12 @@ namespace Data
             {
                 entity.Property(d => d.TipoDrink).HasConversion<string>();
             });
+
+            modelBuilder.Entity<Item>()
+                .HasOne(i => i.SaborDrink)
+                .WithMany()
+                .HasForeignKey(i => i.SaborDrinkId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

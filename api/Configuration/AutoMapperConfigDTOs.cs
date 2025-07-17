@@ -23,7 +23,9 @@ namespace api.Configuration
                 .ForMember(dest => dest.TotalPedidoFormatado, opt =>
                     opt.MapFrom(src => src.TotalPedido.ToString("N2", new System.Globalization.CultureInfo("pt-BR"))))
                 .ForMember(dest => dest.DateTimeFormatado, opt =>
-                    opt.MapFrom(src => src.DateTime.ToString(("dd/MM/yyyy HH:mm"))))
+                    opt.MapFrom(src => TimeZoneInfo.ConvertTimeFromUtc(
+                        DateTime.SpecifyKind(src.DateTime, DateTimeKind.Utc),
+                        TimeZoneInfo.Local).ToString("dd/MM/yyyy HH:mm")))
                 .ForMember(dest => dest.NumeroMesa, opt =>
                     opt.MapFrom(src => src.Mesa != null ? src.Mesa.NumeroMesa : 0))
                 .ForMember(dest => dest.MesaId, opt =>

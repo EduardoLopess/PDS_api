@@ -9,6 +9,7 @@ namespace Domain.ViewModels
         public bool DisponibilidadeProduto { get; set; }
         public CategoriaProduto? CategoriaProduto { get; set; }
         public TipoProduto? TipoProduto { get; set; }
-       
+        public int CodigoNCM { get; set; }
+
     }
 }

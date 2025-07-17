@@ -11,16 +11,16 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Serviços
-builder.Services.AddControllers(); // <-- ESSENCIAL
+builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
-
 
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAutoMapper(typeof(AutoMapperConfigDTOs), typeof(AutoMapperConfigViewModels));
 
+// Injeções de dependência
 builder.Services.AddScoped<IProdutoService, ProdutoValidation>();
 builder.Services.AddScoped<IMesaService, MesaValidation>();
 builder.Services.AddScoped<IPedidoService, PedidoValidation>();
@@ -31,45 +31,53 @@ builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
 builder.Services.AddScoped<ISaborRepository, SaborRepository>();
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IAdicionalRepository, AdicionalRepository>();
-// builder.Services.AddScoped<IItemRepository, IItemRepository>();
 
+// CORS para o frontend acessar
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DefaultPolicy", builder =>
     {
         builder
-            .WithOrigins("http://localhost:1420", "http://192.168.5.5:1420") // coloque aqui todos os frontends
+            .WithOrigins("http://localhost:1420", "http://192.168.5.5:1420") // Frontend local e em rede
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials(); // <- ISSO É O QUE FALTAVA
+            .AllowCredentials();
     });
 });
 
-
+// SignalR
 builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-
-
+// Middleware de CORS
 app.UseCors("DefaultPolicy");
 
+// Middleware de roteamento
+app.UseRouting();
+
+// (opcional) Autenticação/Autorização, se usar
+// app.UseAuthentication();
+// app.UseAuthorization();
+
+// Swagger
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Minha API V1");
 });
 
-// Pipeline
-if (app.Environment.IsDevelopment())
+// Endpoints
+app.UseEndpoints(endpoints =>
 {
-    app.MapOpenApi();
-}
+    endpoints.MapControllers();
+    endpoints.MapHub<PedidoHub>("/pedidoHub");
+    endpoints.MapHub<ProdutoHub>("/produtoHub");
+    endpoints.MapHub<AdicionalHub>("/adicionalHub");
+    endpoints.MapHub<SaborHub>("/saborHub");   
+});
 
-app.MapControllers(); // <-- ESSENCIAL para rotas funcionarem
-app.MapHub<PedidoHub>("/pedidoHub");
-
-
+// HTTPS opcional
 // app.UseHttpsRedirection();
 
 app.Run();

@@ -10,5 +10,6 @@ namespace Domain.Entities
         public TipoDrink TipoDrink { get; set; }
         public int SaborId { get; set; }
         public ICollection<Sabor> Sabores { get; set; } = [];
+        
     }
 }

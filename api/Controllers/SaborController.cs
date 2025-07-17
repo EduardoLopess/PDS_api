@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.RealtimeHubs;
 using AutoMapper;
 using Domain.DTOs;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace api.Controllers
 {
@@ -17,10 +19,13 @@ namespace api.Controllers
     {
         private readonly ISaborRepository _saborRepository;
         private readonly IMapper _mapper;
-        public SaborController(ISaborRepository saborRepository, IMapper mapper)
+        private readonly IHubContext<SaborHub> _hubContext;
+
+        public SaborController(ISaborRepository saborRepository, IMapper mapper, IHubContext<SaborHub> hubContext)
         {
             _saborRepository = saborRepository;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -71,6 +76,25 @@ namespace api.Controllers
             await _saborRepository.UpdateAsync(sabor);
 
             var saborDTO = _mapper.Map<SaborDTO>(sabor);
+
+            string tipoAtalizacao = string.Empty;
+            if (!sabor.Disponivel)
+            {
+                tipoAtalizacao = "SaborAtualizado";
+            }
+            else
+            {
+                tipoAtalizacao = "SaborAtualizado";
+            }
+
+            await _hubContext.Clients.All.SendAsync("SaborAtualizado", new
+            {
+                sabor = saborDTO,
+                tipo = tipoAtalizacao
+            });
+
+
+
             return
                 HttpMessageOk(saborDTO);
         }

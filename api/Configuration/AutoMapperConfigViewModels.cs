@@ -13,8 +13,8 @@ namespace api.Configuration
         public AutoMapperConfigViewModels()
         {
             CreateMap<ProdutoViewModel, Produto>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.Drink, opt => opt.Ignore());
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+                
     
             CreateMap<MesaViewModel, Mesa>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore()) // Ignora o Id ausente na ViewModel
