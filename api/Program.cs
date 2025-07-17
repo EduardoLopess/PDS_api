@@ -50,15 +50,16 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+app.Urls.Clear();
+app.Urls.Add($"http://*:{port}");
+
 // Middleware de CORS
 app.UseCors("DefaultPolicy");
 
 // Middleware de roteamento
 app.UseRouting();
-
-// (opcional) Autenticação/Autorização, se usar
-// app.UseAuthentication();
-// app.UseAuthorization();
 
 // Swagger
 app.UseSwagger();
