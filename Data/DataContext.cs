@@ -24,7 +24,7 @@ namespace Data
             if (!optionsBuilder.IsConfigured)
             {
                 
-                optionsBuilder.UseNpgsql("Host=ep-green-snow-acmh1wuh-pooler.sa-east-1.aws.neon.tech;Port=5432;Database=neondb;Username=neondb_owner;Password=npg_zB24fJNDLWQO;SSL Mode=Require;Trust Server Certificate=true");
+                optionsBuilder.UseNpgsql("j");
             }
         }
 
